@@ -97,8 +97,8 @@ if __name__ == "__main__":
     w = len(str(s * s))
     result = "solvable" if solv else "unsolvable"
     print(f"# This puzzle is {result}")
-    print(f"{s}")
+    print(f"Size = {s}")
     for y in range(s):
         for x in range(s):
-            print("%s" % (str(puzzle[x + y * s]).rjust(w)))
-    print()
+            print("%s" % (str(puzzle[x + y * s]).rjust(w)), end='')
+        print()
