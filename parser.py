@@ -1,8 +1,5 @@
-import numpy as np
-
-
 def parse(filename):
-    res = np.array([])
+    res = []
     lines = read(filename)
     lines = delete_comments(lines)
     if not lines[0].isdecimal:
@@ -11,13 +8,13 @@ def parse(filename):
     if len(lines) != size + 1:
         raise Exception('Error: puzzle contains {0} raws, must be {1}'.format(len(lines) - 1, size))
     for index, l in enumerate(lines[1:]):
-        elems = l.split(' ')
-        check_line(elems, size, index)
-        res = np.append(res, np.array(elems), axis=0)
-    if len(np.unique(res)) != len(res):
+        elements = l.split(' ')
+        check_line(elements, size, index)
+        res.extend(elements)
+    if len(set(res)) != len(res):
         raise Exception('Error: duplicate numbers in puzzle')
-    res = np.reshape(res, (size, size))
-    return res
+    # return [res[i * size: size + size * i] for i in range(size)]
+    return res, size
 
 
 def read(filename):
@@ -45,3 +42,4 @@ def check_line(line, size, l_idx):
     for index, el in enumerate(line):
         if not(el.isdecimal() and 0 <= int(el) <= max_el):
             raise Exception('Error: line {0} element {1}'.format(l_idx, index))
+
