@@ -6,11 +6,10 @@ def parse(filename):
         raise Exception('Error: first line must contain puzzle size and nothing else')
     size = int(lines[0])
     if len(lines) != size + 1:
-        raise Exception('Error: puzzle contains {0} raws, must be {1}'.format(len(lines) - 1, size))
+        raise Exception(f'Error: puzzle contains {len(lines) - 1} raws, must be {size}')
     for index, l in enumerate(lines[1:]):
         elements = l.split(' ')
-        check_line(elements, size, index)
-        res.extend(elements)
+        res.extend(check_line(elements, size, index))
     if len(set(res)) != len(res):
         raise Exception('Error: duplicate numbers in puzzle')
     # return [res[i * size: size + size * i] for i in range(size)]
@@ -38,8 +37,14 @@ def delete_comments(lines):
 def check_line(line, size, l_idx):
     max_el = size**2 - 1
     if len(line) != size:
-        raise Exception('Error: line {0} contains {1} elements, must be {2}'.format(l_idx, len(line), size))
+        raise Exception(f'Error: line {l_idx} contains {len(line)} elements, must be {size}')
+    res = []
     for index, el in enumerate(line):
-        if not(el.isdecimal() and 0 <= int(el) <= max_el):
-            raise Exception('Error: line {0} element {1}'.format(l_idx, index))
-
+        try:
+            el = int(el)
+        except ValueError as e:
+            raise ValueError(f'Error: line {l_idx} element {index}')
+        if 0 > el > max_el:
+            raise Exception(f'Error: line {l_idx} element {index}')
+        res.append(el)
+    return res
